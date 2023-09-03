@@ -1,14 +1,16 @@
+import { ModalWindow } from './ModalWindow';
+
 export const Gallery = ({ images }) => {
   return (
     <ul>
       {images.map(image => {
         return (
           <li key={image.id}>
-            <img
-              src={image.webformatURL}
-              alt={image.largeImageURL}
-              loading="lazy"
-            />
+            <ModalWindow
+              webformatURL={image.webformatURL}
+              largeImageURL={image.largeImageURL}
+              tag={image.tag}
+            ></ModalWindow>
           </li>
         );
       })}
