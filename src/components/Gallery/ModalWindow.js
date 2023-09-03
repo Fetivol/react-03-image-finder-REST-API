@@ -1,8 +1,18 @@
 import { Component } from 'react';
 import Modal from 'react-modal';
-import { Image } from './Gallery.styled';
+import { Image, ModalImage } from './Gallery.styled';
 
 Modal.setAppElement('#root');
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
 
 export class ModalWindow extends Component {
   state = {
@@ -31,9 +41,10 @@ export class ModalWindow extends Component {
         <Modal
           isOpen={this.state.modalIsOpen}
           onRequestClose={() => this.closeModal()}
+          style={customStyles}
           contentLabel="Minimal Modal Example"
         >
-          <img src={largeImageURL} alt={tag} />
+          <ModalImage src={largeImageURL} alt={tag} />
           <button onClick={() => this.closeModal()}>Close Modal</button>
         </Modal>
       </div>

@@ -1,8 +1,9 @@
+import { ImageList } from './Gallery.styled';
 import { ModalWindow } from './ModalWindow';
 
 export const Gallery = ({ images }) => {
   return (
-    <ul>
+    <ImageList>
       {images.map(image => {
         return (
           <li key={image.id}>
@@ -14,6 +15,6 @@ export const Gallery = ({ images }) => {
           </li>
         );
       })}
-    </ul>
+    </ImageList>
   );
 };

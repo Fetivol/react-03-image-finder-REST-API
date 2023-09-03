@@ -2,6 +2,8 @@ import { Component } from 'react';
 import { SearchForm } from './SearchForm/SearchForm';
 import { fetchImages } from './api';
 import { Gallery } from './Gallery/Gallery';
+import { GlobalStyle } from './GlobalStyle';
+import { Layout } from './Layout';
 
 export class App extends Component {
   state = {
@@ -55,12 +57,13 @@ export class App extends Component {
   render() {
     // console.log(this.state);
     return (
-      <div>
+      <Layout>
         <SearchForm onSubmit={this.handleSubmit} />
         {this.state.images.length > 0 && <div>Gallery</div>}
         <Gallery images={this.state.images}></Gallery>
         <button onClick={this.handleLoadMore}>Load more</button>
-      </div>
+        <GlobalStyle />
+      </Layout>
     );
   }
 }
