@@ -4,7 +4,7 @@ import { fetchImages } from './api';
 import { Gallery } from './Gallery/Gallery';
 import { GlobalStyle } from './GlobalStyle';
 import { Layout } from './Layout';
-import { LoadMoreButton } from './LoadMore/LoadMore';
+import { LoadMoreButton } from './LoadMoreButton/LoadMoreButton';
 import { Loader } from './Loader/Loader';
 import toast, { Toaster } from 'react-hot-toast';
 

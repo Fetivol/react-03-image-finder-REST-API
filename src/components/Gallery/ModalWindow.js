@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import Modal from 'react-modal';
 import { Image, ModalImage } from './Gallery.styled';
-import { LoadMore } from 'components/LoadMore/LoadMore.styled';
+import { LoadMore } from 'components/LoadMoreButton/LoadMoreButton.styled';
 
 Modal.setAppElement('#root');
 const customStyles = {

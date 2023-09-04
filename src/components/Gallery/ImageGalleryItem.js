@@ -7,7 +7,7 @@ export const ImageGalleryItem = ({ image }) => {
         webformatURL={image.webformatURL}
         largeImageURL={image.largeImageURL}
         tag={image.tag}
-      ></ModalWindow>
+      />
     </li>
   );
 };

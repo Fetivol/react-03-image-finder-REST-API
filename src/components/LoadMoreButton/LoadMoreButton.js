@@ -1,4 +1,4 @@
-import { ButtonWrapper, LoadMore } from './LoadMore.styled';
+import { ButtonWrapper, LoadMore } from './LoadMoreButton.styled';
 
 export const LoadMoreButton = ({ onClick }) => {
   return (
