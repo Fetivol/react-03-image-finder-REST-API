@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
 export const Layout = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  margin: 0 auto;
-  padding: 10px;
-  align-items: center;
+  .App {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 16px;
+    padding-bottom: 24px;
+  }
 `;

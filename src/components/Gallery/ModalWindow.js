@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import Modal from 'react-modal';
 import { Image, ModalImage } from './Gallery.styled';
+import { LoadMore } from 'components/LoadMore/LoadMore.styled';
 
 Modal.setAppElement('#root');
 const customStyles = {
@@ -45,7 +46,7 @@ export class ModalWindow extends Component {
           contentLabel="Minimal Modal Example"
         >
           <ModalImage src={largeImageURL} alt={tag} />
-          <button onClick={() => this.closeModal()}>Close Modal</button>
+          <LoadMore onClick={() => this.closeModal()}>Close Modal</LoadMore>
         </Modal>
       </div>
     );
