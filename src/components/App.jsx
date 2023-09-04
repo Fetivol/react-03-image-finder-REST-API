@@ -13,7 +13,7 @@ export class App extends Component {
     images: [],
     page: 1,
     loading: false,
-    // loadMoreBtn: true,
+    loadMoreBtn: true,
   };
 
   handleSubmit = evt => {
@@ -33,59 +33,70 @@ export class App extends Component {
     }));
   };
 
+  // async componentDidUpdate(prevProps, prevState) {
+  //   const { query, page } = this.state;
+  //   if (prevState.query !== query || prevState.page !== page) {
+  //     try {
+  //       this.setState({ loading: true, loadMoreBtn: false });
+  //       const searchedImages = await fetchImages(query, page);
+  //       // console.log(searchedImages);
+  //       if (page === 1) {
+  //         this.setState({ images: searchedImages.hits });
+  //       } else {
+  //         this.setState({
+  //           images: [...prevState.images, ...searchedImages.hits],
+  //         });
+  //       }
+  //       if (page === Math.ceil(searchedImages.totalHits / 12)) {
+  //         console.log('We found all images=)');
+  //         this.setState({ loadMoreBtn: true });
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     } finally {
+  //       this.setState({ loading: false });
+  //     }
+  //   }
+  // }
   async componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.query !== this.state.query ||
-      prevState.page !== this.state.page
-    ) {
-      try {
-        this.setState({ loading: true, loadMoreBtn: false });
-        const searchedImages = await fetchImages(
-          this.state.query,
-          this.state.page
-        );
-        // console.log(searchedImages);
-        // if (this.state.page === 1) {
-        //   this.setState({ images: searchedImages.hits });
-        // } else {
-        //   this.setState({
-        //     images: [...prevState.images, ...searchedImages.hits],
-        //   });
-        // }
-        // if (this.state.page === Math.ceil(searchedImages.totalHits / 12)) {
-        //   console.log('We found all images=)');
-        //   this.setState({ loadMoreBtn: false });
-        // }
-        if (
-          this.state.page === 1 ||
-          this.state.page < Math.ceil(searchedImages.totalHits / 12)
-        ) {
-          this.setState({
-            images: [...prevState.images, ...searchedImages.hits],
-          });
-        } else {
-          console.log('We found all images=)');
-          this.setState({ loadMoreBtn: false });
-        }
+    const { query, page } = this.state;
 
-        this.setState({ loading: false });
+    if (prevState.query !== query || prevState.page !== page) {
+      this.setState({ loading: true, loadMoreBtn: false });
+
+      try {
+        const searchedImages = await fetchImages(query, page);
+        this.updateImages(searchedImages.hits, page);
+        this.checkIfAllImagesFound(searchedImages.totalHits, page);
       } catch (error) {
         console.error(error);
       } finally {
+        this.setState({ loading: false });
       }
     }
   }
 
+  updateImages(newImages, page) {
+    this.setState(prevState => ({
+      images: page === 1 ? newImages : [...prevState.images, ...newImages],
+    }));
+  }
+
+  checkIfAllImagesFound(totalHits, page) {
+    if (page === Math.ceil(totalHits / 12)) {
+      console.log('We found all images=)');
+      this.setState({ loadMoreBtn: true });
+    }
+  }
+
   render() {
-    console.log('render', this.state);
+    const { images, loading, loadMoreBtn } = this.state;
     return (
       <Layout>
         <SearchForm onSubmit={this.handleSubmit} />
-        {this.state.images.length > 0 && (
-          <Gallery images={this.state.images}>Gallery</Gallery>
-        )}
-        {this.state.loading && <Loader />}
-        {this.state.images.length > 0 && this.state.loadMoreBtn && (
+        {images.length > 0 && <Gallery images={images}>Gallery</Gallery>}
+        {loading && <Loader />}
+        {images.length > 0 && !loadMoreBtn && (
           <LoadMoreButton onClick={this.handleLoadMore} />
         )}
 
