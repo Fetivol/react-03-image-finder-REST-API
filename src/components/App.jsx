@@ -15,6 +15,7 @@ export class App extends Component {
     page: 1,
     loading: false,
     loadMoreBtn: true,
+    error: false,
   };
 
   handleSubmit = evt => {
@@ -56,9 +57,10 @@ export class App extends Component {
         this.checkIfAllImagesFound(searchedImages.totalHits, page);
       } catch (error) {
         console.error(error);
+        this.setState({ loading: false, error: true });
         toast.error('Something went wrong, please reload website!');
       } finally {
-        this.setState({ loading: false, errorMessage: false });
+        this.setState({ loading: false, error: false });
       }
     }
   }
