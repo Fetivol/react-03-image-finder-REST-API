@@ -6,6 +6,7 @@ import { GlobalStyle } from './GlobalStyle';
 import { Layout } from './Layout';
 import { LoadMoreButton } from './LoadMore/LoadMore';
 import { Loader } from './Loader/Loader';
+import toast, { Toaster } from 'react-hot-toast';
 
 export class App extends Component {
   state = {
@@ -23,8 +24,12 @@ export class App extends Component {
       images: [],
       page: 1,
     });
-    console.log('submit', this.state);
     evt.target.reset();
+
+    if (!this.state.query) {
+      toast.error('Please fill the form!');
+      return;
+    }
   };
 
   handleLoadMore = () => {
@@ -33,31 +38,6 @@ export class App extends Component {
     }));
   };
 
-  // async componentDidUpdate(prevProps, prevState) {
-  //   const { query, page } = this.state;
-  //   if (prevState.query !== query || prevState.page !== page) {
-  //     try {
-  //       this.setState({ loading: true, loadMoreBtn: false });
-  //       const searchedImages = await fetchImages(query, page);
-  //       // console.log(searchedImages);
-  //       if (page === 1) {
-  //         this.setState({ images: searchedImages.hits });
-  //       } else {
-  //         this.setState({
-  //           images: [...prevState.images, ...searchedImages.hits],
-  //         });
-  //       }
-  //       if (page === Math.ceil(searchedImages.totalHits / 12)) {
-  //         console.log('We found all images=)');
-  //         this.setState({ loadMoreBtn: true });
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     } finally {
-  //       this.setState({ loading: false });
-  //     }
-  //   }
-  // }
   async componentDidUpdate(prevProps, prevState) {
     const { query, page } = this.state;
 
@@ -66,26 +46,36 @@ export class App extends Component {
 
       try {
         const searchedImages = await fetchImages(query, page);
-        this.updateImages(searchedImages.hits, page);
+        if (!searchedImages.totalHits) {
+          toast.error('We could not find the images you requested =(');
+          return;
+        }
+        this.updateImages(searchedImages.hits, page, searchedImages.totalHits);
         this.checkIfAllImagesFound(searchedImages.totalHits, page);
       } catch (error) {
         console.error(error);
+        toast.error('Something went wrong, please reload website!');
       } finally {
-        this.setState({ loading: false });
+        this.setState({ loading: false, errorMessage: false });
       }
     }
   }
 
-  updateImages(newImages, page) {
+  updateImages(newImages, page, totalHits) {
     this.setState(prevState => ({
       images: page === 1 ? newImages : [...prevState.images, ...newImages],
     }));
+    if (page === 1) {
+      toast.success(`We found ${totalHits} images=)`);
+    }
   }
 
   checkIfAllImagesFound(totalHits, page) {
     if (page === Math.ceil(totalHits / 12)) {
-      console.log('We found all images=)');
       this.setState({ loadMoreBtn: true });
+      toast.success(
+        'These are all our images for this category=) Try to search something else!'
+      );
     }
   }
 
@@ -99,7 +89,7 @@ export class App extends Component {
         {images.length > 0 && !loadMoreBtn && (
           <LoadMoreButton onClick={this.handleLoadMore} />
         )}
-
+        <Toaster />
         <GlobalStyle />
       </Layout>
     );

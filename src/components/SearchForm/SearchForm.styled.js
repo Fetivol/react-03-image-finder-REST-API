@@ -46,7 +46,7 @@ export const Input = styled.input`
 
 export const Button = styled.button`
   display: inline-block;
-  width: 48px;
+  width: 60px;
   height: 48px;
   border: 0;
   background-image: url('https://image.flaticon.com/icons/svg/149/149852.svg');
