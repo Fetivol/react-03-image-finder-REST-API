@@ -26,7 +26,7 @@ export class App extends Component {
     });
     evt.target.reset();
 
-    if (!this.state.query) {
+    if (!evt.target.elements.query.value.trim()) {
       toast.error('Please fill the form!');
       return;
     }
