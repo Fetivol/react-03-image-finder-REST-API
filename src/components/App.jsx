@@ -19,17 +19,18 @@ export class App extends Component {
 
   handleSubmit = evt => {
     evt.preventDefault();
+    let query = evt.target.elements.query.value.trim();
+    if (!query) {
+      toast.error('Please fill the form!');
+      return;
+    }
+
     this.setState({
-      query: `${evt.target.elements.query.value.trim()}`,
+      query: `${Date.now()}/${query}`,
       images: [],
       page: 1,
     });
     evt.target.reset();
-
-    if (!evt.target.elements.query.value.trim()) {
-      toast.error('Please fill the form!');
-      return;
-    }
   };
 
   handleLoadMore = () => {
@@ -40,12 +41,13 @@ export class App extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     const { query, page } = this.state;
+    const queryString = query.slice(query.indexOf('/') + 1);
 
     if (prevState.query !== query || prevState.page !== page) {
       this.setState({ loading: true, loadMoreBtn: false });
 
       try {
-        const searchedImages = await fetchImages(query, page);
+        const searchedImages = await fetchImages(queryString, page);
         if (!searchedImages.totalHits) {
           toast.error('We could not find the images you requested =(');
           return;
